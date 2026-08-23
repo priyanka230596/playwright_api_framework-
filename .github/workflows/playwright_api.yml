@@ -1,4 +1,5 @@
 name: Playwright Tests
+
 on:
   workflow_dispatch:
     inputs:
@@ -45,9 +46,23 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Create environment file
+        env:
+          DEV_ENV: ${{ secrets.DEV_ENV }}
+          QA_ENV: ${{ secrets.QA_ENV }}
+        run: |
+          mkdir -p env-files
+
+          if [ "$TEST_ENV" = "dev" ]; then
+            printf '%s\n' "$DEV_ENV" > env-files/.env.dev
+          else
+            printf '%s\n' "$QA_ENV" > env-files/.env.qa
+          fi
+
       - name: Debug Environment
         run: |
-           echo "Environment: $TEST_ENV"
+          echo "Environment: $TEST_ENV"
+          echo "Environment file created"
 
       - name: Run Playwright tests (Shard ${{ matrix.shard }})
         run: npx playwright test --shard=${{ matrix.shard }}/4
