@@ -14,7 +14,7 @@ test.describe('product api', () => {
         const body = await response.json()
         expect(body.products.length).toBeGreaterThan(0)
         expect(body.products.length).toEqual(30)
-        console.log(body.products.length)
+        // console.log(body.products.length)
 
 
 

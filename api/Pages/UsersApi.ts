@@ -20,7 +20,7 @@ export class UserApi{
 
     async GetCurrentUser(){
       const response=await this.apiClient.get('/auth/me')
-      console.log(AuthManager.getToken())
+    //   console.log(AuthManager.getToken())
       return response
     }
 }

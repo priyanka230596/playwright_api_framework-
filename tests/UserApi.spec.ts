@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test'
 import { UserApi } from '../api/Pages/UsersApi'
 import { LoginPage } from '../api/Pages/AuthenticationApi'
 import { AuthManager } from '../utils/AuthManager'
+import { singleUserSchema } from '../utils/schemas/singleUserSchema'
+import Ajv from 'ajv'
 
 test.describe('User Api ', async () => {
     let userapi: UserApi
@@ -11,10 +13,10 @@ test.describe('User Api ', async () => {
 
         expect(loginResponse.status()).toBe(200);
 
-        console.log(
-            'Token in beforeEach:',
-            AuthManager.getToken()
-        );
+        // console.log(
+        //     'Token in beforeEach:',
+        //     AuthManager.getToken()
+        // );
         userapi = new UserApi(request)
     })
 
@@ -32,12 +34,22 @@ test.describe('User Api ', async () => {
         expect(body.users).toContainEqual(expect.objectContaining({ firstName: 'Emily' }))
     })
 
-    test('verify get user by id api', async () => {
+    test.only('verify get user by id api', async () => {
         const response = await userapi.GetUserById()
         const body = await response.json()
+        console.log(body)
 
         expect(response.status()).toBe(200)
         expect(body.id).toEqual(Number(process.env.user_id))
+        const ajv = new Ajv()
+        const validate = ajv.compile(singleUserSchema)
+        const valid = validate(body)
+
+        if (!valid) {
+            console.log("Schema validation errors:");
+            console.log(validate.errors)
+        }
+        expect(valid).toBe(true)
 
 
     })
@@ -46,8 +58,8 @@ test.describe('User Api ', async () => {
 
         const response = await userapi.GetCurrentUser()
         const body = await response.json()
-        console.log('Status:', response.status());
-        console.log('Response body:', body);
+        // console.log('Status:', response.status());
+        // console.log('Response body:', body);
         expect(response.status()).toBe(200)
         expect(body.firstName).toEqual('Emily')
     })

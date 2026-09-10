@@ -33,7 +33,7 @@ async login(): Promise<APIResponse> {
         }
     );
 
-    console.log("Login status:", response.status());
+    // console.log("Login status:", response.status());
 
     const body = await response.json();
 
@@ -41,7 +41,7 @@ async login(): Promise<APIResponse> {
 
     AuthManager.setToken(body.accessToken);
 
-    console.log("TOKEN AFTER SET:", AuthManager.getToken());
+    // console.log("TOKEN AFTER SET:", AuthManager.getToken());
 
     return response;
 }

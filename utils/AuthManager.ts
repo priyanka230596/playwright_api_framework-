@@ -26,12 +26,12 @@ export class AuthManager {
     private static accessToken: string = "";
 
     static setToken(accessToken: string) {
-        console.log("Setting token:", accessToken);
+        // console.log("Setting token:", accessToken);
         this.accessToken = accessToken;
     }
 
     static getToken(): string {
-        console.log("Getting token:", this.accessToken);
+        // console.log("Getting token:", this.accessToken);
         return this.accessToken;
     }
 
